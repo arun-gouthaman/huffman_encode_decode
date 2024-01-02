@@ -1,6 +1,6 @@
-#include "source.h"
-#include "encode.h"
-#include "decode.h"
+//#include "source.h"
+#include "file_encode.h"
+#include "file_decode.h"
 
 
 int main()
