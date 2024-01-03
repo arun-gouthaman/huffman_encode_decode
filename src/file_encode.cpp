@@ -7,14 +7,21 @@
 
 void Encode::encode(const std::string ip_file_path, std::string op_file_path)
 {
-	std::cout << "\nEncoding...\n";
+	std::cout <<"\nEncoding...\n";
 	const std::string& file_content = read_text_file(ip_file_path);
 	std::vector<std::pair<char, int>> freq_vec = build_frequency_vector(file_content);
 
 	std::unique_ptr<Node> root = huffman_tree.build_tree(freq_vec);
 
+	//huffman_tree.navigate_from_node(root, 1);
+
 	std::map<const char, const std::string> op_map = {};
 	huffman_tree.build_map(root, std::string(""), op_map);
+
+	//for (std::pair<const char, const std::string> p : op_map)
+	//{
+	//	std::cout << p.first << ":" << p.second << "\n";
+	//}
 
 	const bytes_data_struct byte_pack_data = build_bits(file_content, op_map);
 
@@ -85,7 +92,7 @@ int* Encode::bit_array_padding_length()
 	{
 		padding_length = BITS_PER_BYTE - bits_length;
 	}
-	else if (bits_length > BITS_PER_BYTE)
+	else if ((bits_length % BITS_PER_BYTE) && bits_length > BITS_PER_BYTE)
 	{
 		padding_length = BITS_PER_BYTE - (bits_length % BITS_PER_BYTE);
 	}
@@ -120,6 +127,7 @@ const bytes_data_struct Encode::build_bits(const std::string& ip_data, const std
 		if (bit_string.length() == BITS_PER_BYTE)
 		{
 			bitset_array[cur_index] = std::bitset<BITS_PER_BYTE>(bit_string);
+			DEBUG_MSG("Debug: bit string:" << bit_string);
 			bit_string.clear();
 			++cur_index;
 		}
@@ -128,6 +136,7 @@ const bytes_data_struct Encode::build_bits(const std::string& ip_data, const std
 			while (bit_string.length() > BITS_PER_BYTE)
 			{
 				bitset_array[cur_index] = std::bitset<BITS_PER_BYTE>(bit_string.substr(0, BITS_PER_BYTE));
+				DEBUG_MSG("Debug: bit string:" << bit_string.substr(0, BITS_PER_BYTE));
 				bit_string = bit_string.substr(BITS_PER_BYTE);
 				++cur_index;
 			}
@@ -138,6 +147,7 @@ const bytes_data_struct Encode::build_bits(const std::string& ip_data, const std
 	{
 		bit_string = std::string(padding_len, '0') + bit_string;
 		bitset_array[cur_index] = std::bitset<BITS_PER_BYTE>(bit_string);
+		DEBUG_MSG("Debug: bit string:" << bit_string);
 	}
 
 	bytes_data_struct bytes_data;
@@ -145,7 +155,7 @@ const bytes_data_struct Encode::build_bits(const std::string& ip_data, const std
 	bytes_data.array_len = array_len;
 	bytes_data.padding_len = padding_len;
 	bytes_data.bit_set_array = bitset_array;
-
+	DEBUG_MSG("Debug: Padding Length: " << bytes_data.padding_len << "\n");
 	return bytes_data;
 }
 
@@ -167,6 +177,7 @@ bool Encode::write_binary_file(const bytes_data_struct& byte_data, std::string& 
 	}
 	for (int i = 0; i < byte_data.array_len; ++i)
 	{
+		DEBUG_MSG("\nDebug: Writing byte: " << byte_data.bit_set_array[i] << "\n");
 		const char uc = (byte_data.bit_set_array[i]).to_ulong();
 		write_to_file.write(reinterpret_cast<const char*>(&uc), 1);
 	}

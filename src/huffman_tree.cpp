@@ -102,7 +102,6 @@ const std::string HuffmanTree::extract_from_tree(const std::string binary_bits, 
 
 void HuffmanTree::navigate_from_node(std::unique_ptr<Node>& node, int indent = 1)
 {
-    DEBUG_MSG("\nDebug: Navigating tree\n");
     std::string indent_char = std::string(indent, ' ');
     if (node->ch != '\0')
     {

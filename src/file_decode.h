@@ -17,5 +17,5 @@ private:
 	// Parse frequency data to std::vector<std::pair<char, int>>
 	const std::vector<std::pair<char, int>> parse_freq_data(const std::string&);
 public:
-	void decode(std::string);
+	void decode(std::string, std::string);
 };
