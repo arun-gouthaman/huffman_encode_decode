@@ -1,6 +1,8 @@
 cmake_minimum_required(VERSION 3.2 FATAL_ERROR)
 # include(CMakePrintHelpers)
 
+set(PROJECT_NAME huffman_encode_decode)
+
 project( ${PROJECT_NAME} )
 
 set( LIBRARY_NAME ${PROJECT_NAME} )
