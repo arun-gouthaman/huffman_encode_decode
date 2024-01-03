@@ -1,0 +1,10 @@
+^C:\MY_FILES\GIT_REPO\HUFFMAN_ENCODE_DECODE\BUILD\CMAKEFILES\A7C5FDD3CF84D15563539C7058CD904F\GENERATE.STAMP.RULE
+setlocal
+"C:\Program Files\CMake\bin\cmake.exe" -SC:/my_files/git_repo/huffman_encode_decode -BC:/my_files/git_repo/huffman_encode_decode/build --check-stamp-list CMakeFiles/generate.stamp.list --vs-solution-file C:/my_files/git_repo/huffman_encode_decode/build/huffman_encode_decode.sln
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
