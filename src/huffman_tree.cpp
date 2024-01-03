@@ -1,9 +1,10 @@
 #include "huffman_tree.h"
+#include "debug_msg.h"
 #include <iostream>
 
 std::unique_ptr<Node> HuffmanTree::build_tree(std::vector<std::pair<char, int>> ip_node_vec)
 {
-    std::cout << "\nBuilding Huffman Tree\n";
+    DEBUG_MSG("\nDebug: Building Huffman Tree\n");
     int vec_size = ip_node_vec.size();
 
     std::unique_ptr<Node> ref_node = nullptr;
@@ -69,7 +70,7 @@ std::unique_ptr<Node> HuffmanTree::build_tree(std::vector<std::pair<char, int>> 
 
 const std::string HuffmanTree::extract_from_tree(const std::string binary_bits, std::unique_ptr<Node>& node)
 {
-    std::cout << "\nExtracting data from huffman tree\n";
+    DEBUG_MSG("\nDebug: Extracting data from huffman tree\n");
     Node* cur_node = node.get();
     std::string::const_iterator it = binary_bits.begin();
     std::string extracted_str = "";
@@ -101,6 +102,7 @@ const std::string HuffmanTree::extract_from_tree(const std::string binary_bits, 
 
 void HuffmanTree::navigate_from_node(std::unique_ptr<Node>& node, int indent = 1)
 {
+    DEBUG_MSG("\nDebug: Navigating tree\n");
     std::string indent_char = std::string(indent, ' ');
     if (node->ch != '\0')
     {

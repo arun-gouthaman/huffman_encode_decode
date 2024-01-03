@@ -24,7 +24,7 @@ void Encode::encode(const std::string ip_file_path, std::string op_file_path)
 
 const std::string Encode::read_text_file(const std::string& file_path)
 {
-	std::cout << "\nReading from file " << file_path << "\n";
+	DEBUG_MSG("\nDebug: Reading from file " << file_path << "\n");
 	std::string file_data;
 	std::ifstream input_data(file_path, std::ios::in);
 	if (!input_data)
@@ -36,11 +36,12 @@ const std::string Encode::read_text_file(const std::string& file_path)
 	return content;
 }
 
+// Lambda function to sort vector<pair<char, int>> based on the int values.
 auto compare_pair = [](std::pair<char, int> a, std::pair<char, int> b) { return a < b; };
 
 std::vector<std::pair<char, int>> Encode::build_frequency_vector(const std::string& file_data)
 {
-	std::cout << "\nBuilding frequency data\n";
+	DEBUG_MSG("\nDebug: Building frequency data\n");
 	std::map<char, int> freq_map;
 	std::string::const_iterator str_it = file_data.begin();
 	while (str_it != file_data.end())
@@ -55,6 +56,8 @@ std::vector<std::pair<char, int>> Encode::build_frequency_vector(const std::stri
 		sort_vec.push_back(p);
 	}
 
+	// Sort vector in order of frequency to build huffman tree
+	// characters with high frequency appears near the top of the tree
 	std::sort(sort_vec.begin(), sort_vec.end(), compare_pair);
 
 	return sort_vec;
@@ -62,7 +65,7 @@ std::vector<std::pair<char, int>> Encode::build_frequency_vector(const std::stri
 
 int* Encode::bit_array_padding_length()
 {
-	std::cout << "\nCalculating padding bits length \n";
+	DEBUG_MSG("\nDebug: Calculating padding bits length \n");
 	int bits_length = huffman_tree.get_bits_length();
 	int array_len = 1;
 	int padding_length = 0;
@@ -94,7 +97,7 @@ int* Encode::bit_array_padding_length()
 
 const bytes_data_struct Encode::build_bits(const std::string& ip_data, const std::map<const char, const std::string> bit_map)
 {
-	std::cout << "\nBuilding bits\n";
+	DEBUG_MSG("\nDebug: Building bits\n");
 	std::string bit_string = std::string();
 
 	int* len_data = bit_array_padding_length();
@@ -103,7 +106,7 @@ const bytes_data_struct Encode::build_bits(const std::string& ip_data, const std
 	delete len_data;
 	len_data = nullptr;
 
-	std::bitset<8>* bitset_array = new std::bitset<8>[array_len];
+	std::bitset<BITS_PER_BYTE>* bitset_array = new std::bitset<BITS_PER_BYTE>[array_len];
 	bitset_array[0] = std::bitset<BITS_PER_BYTE>(padding_len);
 	
 	int cur_index = 1;
@@ -148,9 +151,10 @@ const bytes_data_struct Encode::build_bits(const std::string& ip_data, const std
 
 bool Encode::write_binary_file(const bytes_data_struct& byte_data, std::string& write_file_path)
 {
-	std::cout << "\nWriting to binary file " << write_file_path << "\n";
+	DEBUG_MSG("\nDebug: Writing to binary file " << write_file_path << "\n");
 	write_file_path = sanitize_file_path(write_file_path, "bin");
 
+	// Delete file if exists before writing.
 	if (std::filesystem::exists(write_file_path))
 	{
 		std::filesystem::remove(write_file_path);
@@ -175,7 +179,7 @@ bool Encode::write_binary_file(const bytes_data_struct& byte_data, std::string& 
 bool Encode::write_freq_map_data(const std::vector<std::pair<char, int>> freq_vec, std::string& write_file_path)
 {
 	write_file_path = sanitize_file_path(write_file_path, "txt");
-	std::cout << "\nWriting frequency map to " << write_file_path << "\n";
+	DEBUG_MSG("\nDebug: Writing frequency map to " << write_file_path << "\n");
 
 	std::ofstream write_to_file(write_file_path, std::ios::out);
 	if (!write_to_file)
@@ -185,6 +189,8 @@ bool Encode::write_freq_map_data(const std::vector<std::pair<char, int>> freq_ve
 
 	std::string mapping_data_string = std::string("");
 
+	// Build data as key value structure
+	// [key1:value1][key2:value2]
 	for (const std::pair<char, int> p : freq_vec)
 	{
 		mapping_data_string += "[" + std::string(1,p.first) + ":" + std::to_string(p.second) + "]";

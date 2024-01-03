@@ -4,7 +4,7 @@
 std::string Decode::read_binary_file(std::string file_path)
 {
     file_path = sanitize_file_path(file_path, "bin");
-    std::cout << "\nReading binary file from " << file_path <<"\n";
+    DEBUG_MSG("\nDebug: Reading binary file from " << file_path << "\n");
     std::ifstream read_from_file(file_path, std::ios::binary | std::ios::in);
 
     if (!read_from_file)
@@ -28,7 +28,6 @@ std::string Decode::read_binary_file(std::string file_path)
             data_byte += std::to_string((c >> i) & 1);
         }
     }
-    //std::cout << data_byte << "\n";
     std::bitset<BITS_PER_BYTE> padding_bits = std::bitset<BITS_PER_BYTE>(first_byte);
 
     std::string original_data = "";
@@ -45,7 +44,7 @@ std::string Decode::read_binary_file(std::string file_path)
 const std::vector<std::pair<char, int>> Decode::read_freq_file(std::string freq_file_path)
 {
     freq_file_path = sanitize_file_path(freq_file_path, "txt");
-    std::cout << "\nReading frequency data from " << freq_file_path << "\n";
+    DEBUG_MSG("\nDebug: Reading frequency data from " << freq_file_path << "\n");
     std::ifstream read_file(freq_file_path, std::ios::in);
     if (!read_file)
     {
@@ -63,7 +62,7 @@ const std::vector<std::pair<char, int>> Decode::read_freq_file(std::string freq_
 
 const std::vector<std::pair<char, int>> Decode::parse_freq_data(const std::string& freq_data_str)
 {
-    std::cout << "\nParsing frequency data to std::vector<std::pair<char, int>>\n";
+    DEBUG_MSG("\nDebug: Parsing frequency data to std::vector<std::pair<char, int>>\n");
     int freq = 0;
     bool open = false;
     std::string cur_str = "";
