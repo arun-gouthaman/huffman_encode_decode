@@ -21,10 +21,6 @@ private:
 public:
     // build huffman tree from frequency data
     std::unique_ptr<Node> build_tree(std::vector<std::pair<char, int>>);
-    
-    
-    std::unique_ptr<Node> build_test_tree(std::vector<std::pair<char, int>>);
-
 
     // Test function to print tree structure from given node
     void navigate_from_node(std::unique_ptr<Node>&, int);

@@ -2,91 +2,21 @@
 #include "debug_msg.h"
 #include <iostream>
 
-std::unique_ptr<Node> HuffmanTree::build_tree(std::vector<std::pair<char, int>> ip_node_vec)
-{
-    DEBUG_MSG("\nDebug: Building Huffman Tree\n");
-    int vec_size = ip_node_vec.size();
-
-    std::unique_ptr<Node> ref_node = nullptr;
-
-    for (int i = 0; i < vec_size;)
-    {
-        std::unique_ptr<Node> node1 = std::make_unique<Node>();
-        node1->ch = ip_node_vec[i].first;
-        node1->sum = ip_node_vec[i].second;
-        std::unique_ptr<Node> sum_node = std::make_unique<Node>();
-
-        sum_node->sum = node1->sum;
-        sum_node->l_node = std::move(node1);
-        node1.reset();
-        
-
-        if (i <= vec_size - 2)
-        {
-            std::unique_ptr<Node> node2 = std::make_unique<Node>();
-            node2->ch = ip_node_vec[i + 1].first;
-            node2->sum = ip_node_vec[i + 1].second;
-            sum_node->sum += node2->sum;
-            sum_node->r_node = std::move(node2);
-            node2.reset();
-        }
-        else
-        {
-            if (ref_node)
-            {
-                sum_node->sum += ref_node->sum;
-                sum_node->r_node = std::move(ref_node);
-            }
-            ref_node = std::move(sum_node);
-            ++i;
-            continue;
-        }
-
-        if (!ref_node)
-        {
-            ref_node = std::move(sum_node);
-        }
-        else
-        {
-            std::unique_ptr<Node> top_sum = std::make_unique<Node>();
-            top_sum->sum = sum_node->sum + ref_node->sum;
-            if (sum_node->sum >= ref_node->sum)
-            {
-                top_sum->l_node = std::move(sum_node);
-                top_sum->r_node = std::move(ref_node);
-            }
-            else
-            {
-                top_sum->l_node = std::move(ref_node);
-                top_sum->r_node = std::move(sum_node);
-            }
-            ref_node = std::move(top_sum);
-        }
-        i += 2;
-    }
-
-    return ref_node;
-}
-
-
-
 void reduce_nodes(std::vector<std::unique_ptr<Node>>& freq_vec, bool to_root = false)
 {
+    DEBUG_MSG("\nDebug: Branching nodes\nReceived nodes count:" << freq_vec.size() << "\n");
     std::vector<std::unique_ptr<Node>>::iterator it = freq_vec.begin();
     std::vector<std::unique_ptr<Node>> ret_vec;
-    std::cout << "Reducing Nodes\n";
     while (it != freq_vec.end())
     {
         std::unique_ptr<Node> node1 = std::make_unique<Node>();
         std::unique_ptr<Node> node2 = std::make_unique<Node>();
         std::unique_ptr<Node> sum_node = std::make_unique<Node>();
         node1 = std::move(*it);
-        std::cout << "Node1: " << node1->ch << "\n";
         ++it;
         if (it != freq_vec.end())
         {
             node2 = std::move(*it);
-            std::cout << "Node2: " << node2->ch << "\n";
             sum_node->sum = node1->sum + node2->sum;
             sum_node->l_node = std::move(node1);
             sum_node->r_node = std::move(node2);
@@ -108,18 +38,13 @@ void reduce_nodes(std::vector<std::unique_ptr<Node>>& freq_vec, bool to_root = f
     freq_vec = std::move(ret_vec);
 }
 //
-std::unique_ptr<Node> HuffmanTree::build_test_tree(std::vector<std::pair<char, int>> freq_vec)
+std::unique_ptr<Node> HuffmanTree::build_tree(std::vector<std::pair<char, int>> freq_vec)
 {
+    DEBUG_MSG("\nDebug: Building tree\n");
     if (freq_vec.empty())
     {
         return std::unique_ptr<Node>();
     }
-    //std::cout << "\nTest Tree\n";
-    //for (std::pair<char, int> p : freq_vec)
-    //{
-    //    std::cout << p.first << ":" << p.second << "\n";
-    //}
-    std::cout << "Count: " << freq_vec.size() << "\n";
 
     int cur_freq = freq_vec[0].second;
 
