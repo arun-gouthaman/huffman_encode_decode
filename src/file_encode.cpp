@@ -13,10 +13,21 @@ void Encode::encode(const std::string ip_file_path, std::string op_file_path)
 
 	std::unique_ptr<Node> root = huffman_tree.build_tree(freq_vec);
 
-	//huffman_tree.navigate_from_node(root, 1);
-
 	std::map<const char, const std::string> op_map = {};
-	huffman_tree.build_map(root, std::string(""), op_map);
+	std::unique_ptr<Node> test_root = huffman_tree.build_test_tree(freq_vec);
+
+	huffman_tree.navigate_from_node(test_root, 1);
+	huffman_tree.build_map(test_root, std::string(""), op_map);
+
+	std::cout << "op map test\n";
+	for (std::pair<const char, const std::string> p : op_map)
+	{
+		std::cout << p.first << ":" << p.second << "\n";
+	}
+
+	//op_map.clear();
+
+	//huffman_tree.build_map(root, std::string(""), op_map);
 
 	//for (std::pair<const char, const std::string> p : op_map)
 	//{
@@ -44,7 +55,7 @@ const std::string Encode::read_text_file(const std::string& file_path)
 }
 
 // Lambda function to sort vector<pair<char, int>> based on the int values.
-auto compare_pair = [](std::pair<char, int> a, std::pair<char, int> b) { return a < b; };
+auto compare_pair = [](std::pair<char, int> a, std::pair<char, int> b) { return a.second < b.second; };
 
 std::vector<std::pair<char, int>> Encode::build_frequency_vector(const std::string& file_data)
 {
@@ -66,6 +77,11 @@ std::vector<std::pair<char, int>> Encode::build_frequency_vector(const std::stri
 	// Sort vector in order of frequency to build huffman tree
 	// characters with high frequency appears near the top of the tree
 	std::sort(sort_vec.begin(), sort_vec.end(), compare_pair);
+
+	for (std::pair<char, int> p : sort_vec)
+	{
+		std::cout << p.first << ":" << p.second << "\n";
+	}
 
 	return sort_vec;
 }

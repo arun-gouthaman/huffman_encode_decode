@@ -12,8 +12,8 @@ int main()
 	std::string op_file = "C://my_files//git_repo//huffman_encode_decode//op_file.bin";
 	encode_file.encode(ip_file, op_file);
 
-	std::string freq_file = "C://my_files//git_repo//huffman_encode_decode//op_file.txt";
-	decode_file.decode(op_file, freq_file);
+	//std::string freq_file = "C://my_files//git_repo//huffman_encode_decode//op_file.txt";
+	//decode_file.decode(op_file, freq_file);
 
 	return 0;
 }

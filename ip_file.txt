@@ -1,1 +1,1 @@
-*huffman test string*
+test string
