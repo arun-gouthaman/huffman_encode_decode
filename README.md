@@ -17,8 +17,10 @@ Build Huffman tree from frequency data.
 
 Navigate the tree suing bits read from binary file and decode characters replacing set of bits with right character. 
 
-to build
+to build:
+
 install cmake (https://cmake.org/download/)
+
 navigate to cloned folder
 
 ```mkdir build; cd build```
