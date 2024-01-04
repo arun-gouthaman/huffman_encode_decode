@@ -16,3 +16,15 @@ Reads from binary file and frequency file.
 Build Huffman tree from frequency data.
 
 Navigate the tree suing bits read from binary file and decode characters replacing set of bits with right character. 
+
+to build
+install cmake (https://cmake.org/download/)
+navigate to cloned folder
+
+```mkdir build; cd build```
+
+```cmake .. -G "Visual Studio 16 2019"```
+
+compiling code
+
+```msbuild .\<solutuion_file>.sln /p:Configuration=Debug```

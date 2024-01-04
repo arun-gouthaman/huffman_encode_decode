@@ -37,7 +37,7 @@ void reduce_nodes(std::vector<std::unique_ptr<Node>>& freq_vec, bool to_root = f
     }
     freq_vec = std::move(ret_vec);
 }
-//
+
 std::unique_ptr<Node> HuffmanTree::build_tree(std::vector<std::pair<char, int>> freq_vec)
 {
     DEBUG_MSG("\nDebug: Building tree\n");
