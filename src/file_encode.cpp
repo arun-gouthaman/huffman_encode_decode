@@ -13,7 +13,7 @@ void Encode::encode(const std::string ip_file_path, std::string op_file_path)
 
 	std::map<const char, const std::string> op_map = {};
 
-	std::unique_ptr<Node> root = huffman_tree.build_tree(freq_vec);
+	std::shared_ptr<Node> root = huffman_tree.build_tree(freq_vec);
 
 	huffman_tree.build_map(root, std::string(""), op_map);
 

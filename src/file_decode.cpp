@@ -122,7 +122,7 @@ void Decode::decode(std::string binary_file_path, std::string freq_file)
     std::cout << "\nDecoding...\n";
     const std::string binary_string = read_binary_file(binary_file_path);
     const std::vector<std::pair<char, int>> freq_vec = read_freq_file(freq_file);
-    std::unique_ptr<Node> root = huffman_tree.build_tree(freq_vec);
+    std::shared_ptr<Node> root = huffman_tree.build_tree(freq_vec);
     //huffman_tree.navigate_from_node(root, 1);
     std::string extracted_string = huffman_tree.extract_from_tree(binary_string, root);
     std::cout << "\nDecoded string:\n" << extracted_string << "\n";
